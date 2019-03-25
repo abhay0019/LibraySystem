@@ -1,7 +1,7 @@
+package com.library;
+
 import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
-
-import javax.jws.soap.SOAPBinding;
 
 public class LibrarySystemApplication extends Application<LibrarySystemConfigration> {
     public static void main(String[] args) throws Exception {

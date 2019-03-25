@@ -1,3 +1,5 @@
+package com.library;
+
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.ws.rs.*;
@@ -17,6 +19,8 @@ public class LibrarySystemResource {
 
     @NotEmpty
     private String libraryName;
+
+    //TODO: ABHAY, these getters and setters are not required here
 
     public List<LibraryBook> getBooksInLibrary() {
         return booksInLibrary;
@@ -46,6 +50,14 @@ public class LibrarySystemResource {
         this.libraryName=libraryName;
     }
 
+    /* TODO: ABHAY, 2 APIs should not be used for same purpose. 1 API for fetching all books,
+        1 API for fetching a book detail from a particular param
+        eg. /search/book?id={id}&name={name}
+            /search/book?id={id}
+            /search/book?name={name}
+            all these three requests can be handled by same resource function
+        REASON: Looking at the function creates confusion about how the API will be, what are the query params and so on.
+    */
     @GET
     @Path("/books-details")
     public List<Book> getBooks(@Context UriInfo uriInfo)
@@ -55,6 +67,9 @@ public class LibrarySystemResource {
         return books;
     }
 
+    /* TODO: ABHAY, same as above
+
+     */
     @GET
     @Path("/users-details")
     public List<User> getUsers(@Context UriInfo uriInfo)
@@ -64,6 +79,7 @@ public class LibrarySystemResource {
         return users;
     }
 
+    //TODO: ABHAY, add @Body    String addBook(@Body Book book)
     @POST
     @Path("/add-book")
     public String addBook(Book book) throws IllegalAccessException {
@@ -78,18 +94,20 @@ public class LibrarySystemResource {
         }
     }
 
+    //TODO: SAME
     @POST
     @Path("/add-user")
     public String addUser(User user) throws IllegalAccessException {
         if(!userExists(user.getUserId())) {
             libraryUser.add(user);
-            return "User Added Successfully !!";
+            return "com.library.User Added Successfully !!";
         }
         else{
             return "UserId : "+user.getUserId()+" already present !!";
         }
     }
 
+    //TODO:[IMP] ABHAY, Post call should always have a body
     @POST
     @Path("/issue-book")
     public String issueBook(@DefaultValue("-1") @QueryParam("bookId") int bookId,
@@ -106,7 +124,7 @@ public class LibrarySystemResource {
         queryParams.add("bookId", String.valueOf(bookId));
         List<Book> books=searchBooks(queryParams);
         if(books.size()==0){
-            return "Sorry, Book Not Available !!";
+            return "Sorry, com.library.Book Not Available !!";
         }
         else{
             if(books.size()!=1){
@@ -119,7 +137,8 @@ public class LibrarySystemResource {
                 else{
                     LibraryBook libraryBook = (LibraryBook) books.get(0);
                     issueBookToUser(libraryBook, userId, days);
-                    return "Issued Book to User "+String.valueOf(userId);
+                    return "Issued com.library.Book to com.library.User "+String.valueOf(userId);
+                    //TODO: ABHAY, concatinating strings with '+' is heavy. Read about other ways of doing so.
                 }
             }
         }
@@ -144,15 +163,20 @@ public class LibrarySystemResource {
             else {
                 LibraryBook libraryBook = (LibraryBook) books.get(0);
                 if(libraryBook.getIsIssued()){
+                    //TODO: ABHAY, there should be separate method for fine computation and separate method for resetting the book attributes.
+                    //TODO: it is a bad practice to pass an object to a method and modify the same object.
                     int fine = returnBookFromUserWithFine(libraryBook);
-                    return "Book "+libraryBook.getBookId()+" returned succesfully with a fine of "+fine;
+                    return "com.library.Book "+libraryBook.getBookId()+" returned succesfully with a fine of "+fine;
                 }
                 else{
-                    return "Book not issued to this user. A fraud !!";
+                    return "com.library.Book not issued to this user. A fraud !!";
                 }
             }
         }
     }
+
+    //TODO: ABHAY, resource should not be thick. These methods should move to controllers and helpers
+
 
     private int returnBookFromUserWithFine(LibraryBook libraryBook) {
 
@@ -192,6 +216,13 @@ public class LibrarySystemResource {
 
     }
 
+
+    /* TODO: ABHAY, search operation can be simplified. Maintain a global list of object(user/book) and simply search in that list with the inputted param
+     */
+
+    //TODO: ABHAY, try implementing the same using java8 constructs
+
+    //TODO: ABHAY, try giving meaningful variable names
     private List<User> searchUsers(MultivaluedMap<String, String> queryParams) throws IllegalAccessException {
         List<User> list = new ArrayList<User>();
         Field[] fields=new User().getClass().getDeclaredFields();
@@ -212,10 +243,11 @@ public class LibrarySystemResource {
         return list;
     }
 
+    //TODO: ABHAY, try implementing the same using java8 constructs
     private List<Book> searchBooks(MultivaluedMap<String, String> queryParams) throws IllegalAccessException {
         List<Book> list = new ArrayList<Book>();
         Field[] fields=new Book().getClass().getDeclaredFields();
-        for(Book b:booksInLibrary) {g
+        for(Book b:booksInLibrary) {
             int count = 0;
             for (Field f : fields) {
                 List<String> values = queryParams.get(f.getName());

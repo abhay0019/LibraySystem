@@ -1,5 +1,6 @@
+package com.library;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -107,7 +108,7 @@ public class LibraryBook extends Book {
 
     @Override
     public String toString() {
-        return "LibraryBook{" +
+        return "com.library.LibraryBook{" +
                 "isIssued=" + isIssued +
                 ", userId=" + userId +
                 ", issueDate=" + issueDate +
