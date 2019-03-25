@@ -51,11 +51,15 @@ public class User{
         this.mobileNo = mobileNo;
     }
 
-    public String findValue(String searchField) throws IllegalAccessException {
+    public String findValue(String searchField){
         Field[] fields = User.class.getDeclaredFields();
         for(Field f : fields){
             if(searchField == f.getName()) {
-                return f.get(this).toString();
+                try {
+                    return f.get(this).toString();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return null;

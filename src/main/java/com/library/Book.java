@@ -71,11 +71,15 @@ public class Book {
         this.bookCost = bookCost;
     }
 
-    public String findValue(String searchField) throws IllegalAccessException {
+    public String findValue(String searchField){
         Field[] fields = Book.class.getDeclaredFields();
         for(Field f : fields){
             if(searchField == f.getName()) {
-                return f.get(this).toString();
+                try {
+                    return f.get(this).toString();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return null;

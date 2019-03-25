@@ -2,7 +2,9 @@ package com.library;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
 public class LibraryBook extends Book {
@@ -115,5 +117,24 @@ public class LibraryBook extends Book {
                 ", dueDate=" + dueDate +
                 ", maxDelayDaysAllowed=" + maxDelayDaysAllowed +
                 '}';
+    }
+
+    public void resetIssueParamters() {
+        this.isIssued=false;
+        this.issueDate=null;
+        this.dueDate=null;
+        this.userId=-1;
+    }
+
+    public void issueBookToUser(int userId, int days) {
+        Calendar cal = new GregorianCalendar();
+        Date issue=cal.getTime();
+        cal.add(Calendar.DATE, days);
+        Date due=cal.getTime();
+
+        this.setIssued(true);
+        this.setUserId(userId);
+        this.setIssueDate(issue);
+        this.setDueDate(due);
     }
 }

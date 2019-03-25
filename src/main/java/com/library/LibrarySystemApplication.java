@@ -8,7 +8,7 @@ public class LibrarySystemApplication extends Application<LibrarySystemConfigrat
         new LibrarySystemApplication().run(args);
     }
     public void run(LibrarySystemConfigration confiration, Environment environment) throws Exception {
-        LibrarySystemResource resource=new LibrarySystemResource(confiration.getLibraryName());
+        LibrarySystemResource resource=new LibrarySystemResource(confiration.getLibraryName(), new Helper());
         resource.addBook(new Book(1,"A","B",100));
         resource.addBook(new Book(2,"A","B",100));
         resource.addBook(new Book(3,"A","B",100));
